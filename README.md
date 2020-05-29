@@ -14,12 +14,15 @@ Offline PV Monitoring System working on Adafruit M0 Feather. The system is compo
 
 ## How to build
 
+![IMS](/images/ims.jpg)
 
 
 ![Schema](/images/schema_irr.png)
 
 list of components
+<!---
 IMAGE OF CIRCUIT
+-->
 
 ## Code walkthrough
 
@@ -33,14 +36,18 @@ The *config.h* contains a few parameters that will influence the monitoring:
 
 **sampling_interval**: defines the rate of sampling and logging to SD card. A 4s sampling rate offers good balance between accuracy and reasonable file length, especially when using Excel.
 
-**isc_current**: the short-circuit current of the PV module
+**max_voltage_count**: the voltage value when the ADC of the ADS1115 measures the maximum value (in counts). For example, with a gain of TWO, the maximum voltage count of 32768 corresponds to 2.048 Volts. It is possible to modify the gain.
 
-**RshuntPV1** and **RshuntPV2**: the value of the shunt resistors.
+**rdiv1_pv**: first resistor in voltage divider.
 
-#### other parameters
+**rdiv2_pv**: second resistor in voltage divider.
+
+**RshuntPV**: the value of the shunt resistor.
+
 
 #### setup()
 
+SD card reader: the code looks at existing log files and creates a new one with an incremented number, before opening it to insert the headers.
 
 #### loop()
 
@@ -52,7 +59,7 @@ For each loop, the program will check if the current time is inside the sleep wi
 * save the computed values into the *.tsv* file
 * handles the OLED screen and buttons
 
-By using *millis()* as our main time management tool, we can therefore achieve a seemingly uninterrupted program that updates in real time the values into the SD card and on the OLED display while listening for buttons inputs.
+By using *millis()*, we get a seemingly uninterrupted program that updates in real time the values into the SD card and on the OLED display while listening for buttons inputs.
 
 
 
@@ -60,6 +67,12 @@ By using *millis()* as our main time management tool, we can therefore achieve a
 
 The following libraries are needed (just type the name in the Arduino IDE under tools->Manage Libraries)
 
+* Adafruit_ADS1015 (external ADC)
 * RTClib (RTC module)
 * Adafruit SleepyDog
 * Adafruit SSD1306 (OLED Display)
+
+
+## Useful links
+
+* [ADS1115 Adafruit page](https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/)
